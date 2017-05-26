@@ -15,11 +15,7 @@ namespace DevExpressDataGrid.Controllers
     {
         public ActionResult Index()
         {
-            if (Session["Model"] == null)
-            {
-                Session["Model"] = db.SimpleData.ToList();
-            }
-            return View(Session["Model"]);
+            return View();
         }
 
         public ActionResult About()
@@ -44,14 +40,14 @@ namespace DevExpressDataGrid.Controllers
         {
             var model = db.SimpleData;
             ViewBag.GridSettings = GetGridSettings();
-            return PartialView("_GridViewPartial", Session["Model"]);
+            return PartialView("_GridViewPartial", model.ToList());
         }
 
         // This action method sends a PDF document with the exported Grid to response. 
         public ActionResult ExportTo()
         {
-            var model = Session["Model"];
-            return GridViewExtension.ExportToXlsx(GetGridSettings(), model);
+            var model = db.SimpleData;
+            return GridViewExtension.ExportToXlsx(GetGridSettings(), model.ToList());
         }
 
         private GridViewSettings GetGridSettings()
