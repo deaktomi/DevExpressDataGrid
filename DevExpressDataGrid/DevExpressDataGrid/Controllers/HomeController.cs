@@ -5,7 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
+using DevExpress.Export;
 using DevExpress.Web;
+using DevExpress.XtraPrinting;
 
 namespace DevExpressDataGrid.Controllers
 {
@@ -13,7 +15,11 @@ namespace DevExpressDataGrid.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (Session["Model"] == null)
+            {
+                Session["Model"] = db.SimpleData.ToList();
+            }
+            return View(Session["Model"]);
         }
 
         public ActionResult About()
@@ -37,14 +43,15 @@ namespace DevExpressDataGrid.Controllers
         public ActionResult GridViewPartial()
         {
             var model = db.SimpleData;
-            return PartialView("_GridViewPartial", model.ToList());
+            ViewBag.GridSettings = GetGridSettings();
+            return PartialView("_GridViewPartial", Session["Model"]);
         }
 
         // This action method sends a PDF document with the exported Grid to response. 
         public ActionResult ExportTo()
         {
-            var model = db.SimpleData;
-            return GridViewExtension.ExportToXlsx(GetGridSettings(), model.ToList());
+            var model = Session["Model"];
+            return GridViewExtension.ExportToXlsx(GetGridSettings(), model);
         }
 
         private GridViewSettings GetGridSettings()
@@ -63,7 +70,7 @@ namespace DevExpressDataGrid.Controllers
             settings.CommandColumn.ShowNewButton = true;
             settings.CommandColumn.ShowDeleteButton = true;
             settings.CommandColumn.ShowEditButton = true;
-
+            
             settings.KeyFieldName = "Id";
 
             settings.SettingsPager.Visible = true;
@@ -88,9 +95,9 @@ namespace DevExpressDataGrid.Controllers
             settings.Columns.Add("Active", "Active", MVCxGridViewColumnType.CheckBox);
 
             //Export
-            settings.SettingsExport.ExportSelectedRowsOnly = false;
             settings.SettingsExport.FileName = "Report.xlsx";
             settings.SettingsExport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            settings.SettingsExport.ExportSelectedRowsOnly = false;
 
             return settings;
         }
@@ -99,6 +106,7 @@ namespace DevExpressDataGrid.Controllers
         public ActionResult GridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] DevExpressDataGrid.Models.SimpleData item)
         {
             var model = db.SimpleData;
+            ViewBag.GridSettings = GetGridSettings();
             if (ModelState.IsValid)
             {
                 try
@@ -118,6 +126,7 @@ namespace DevExpressDataGrid.Controllers
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] DevExpressDataGrid.Models.SimpleData item)
         {
+            ViewBag.GridSettings = GetGridSettings();
             var model = db.SimpleData;
             if (ModelState.IsValid)
             {
@@ -142,6 +151,7 @@ namespace DevExpressDataGrid.Controllers
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialDelete(System.Int32 Id)
         {
+            ViewBag.GridSettings = GetGridSettings();
             var model = db.SimpleData;
             if (Id >= 0)
             {
