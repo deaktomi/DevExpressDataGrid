@@ -3,33 +3,16 @@
     ViewBag.Title = "Home Page";
 }
 
-@section prescripts{
-    <script type="text/javascript">
-        function OnClick(s, e) {
-            var actionParams = $("form").attr("action").split("?OutputFormat=");
-            actionParams[1] = s.GetMainElement().getAttribute("OutputFormatAttribute");
-            $("form").attr("action", actionParams.join("?OutputFormat="));
-        }
-    </script>
-}
 @using (Html.BeginForm("ExportTo", "Home", FormMethod.Post))
 {
 
     @Html.Action("GridViewPartial", "Home")
 
 
-    /*@Html.DevExpress().Button(settings =>
+    @Html.DevExpress().Button(settings =>
     {
         settings.Name = "Button";
         settings.UseSubmitBehavior = true;
         settings.Text = "ExportTo Excel";
-        //settings.RouteValues = new {Controller = "Home", Action = "ExportTo"};
-    }).GetHtml()*/
-    @Html.DevExpress().Button(btn => {
-        btn.Name = "btnExportToXLSX";
-        btn.Attributes["OutputFormatAttribute"] = "XLSX";
-        btn.Text = "XLSX";
-        btn.UseSubmitBehavior = true;
-        btn.ClientSideEvents.Click = "OnClick";
     }).GetHtml()
 }
