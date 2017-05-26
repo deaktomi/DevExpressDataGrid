@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
+using DevExpress.Web;
 
 namespace DevExpressDataGrid.Controllers
 {
@@ -30,11 +32,67 @@ namespace DevExpressDataGrid.Controllers
 
         DevExpressDataGrid.Models.Entities db = new DevExpressDataGrid.Models.Entities();
 
+        // Handles GridView callbacks. 
         [ValidateInput(false)]
         public ActionResult GridViewPartial()
         {
             var model = db.SimpleData;
             return PartialView("_GridViewPartial", model.ToList());
+        }
+
+        // This action method sends a PDF document with the exported Grid to response. 
+        public ActionResult ExportTo()
+        {
+            var model = db.SimpleData;
+            return GridViewExtension.ExportToXlsx(GetGridSettings(), model.ToList());
+        }
+
+        private GridViewSettings GetGridSettings()
+        {
+            var settings = new GridViewSettings();
+            settings.Name = "GridView";
+            settings.CallbackRouteValues = new { Controller = "Home", Action = "GridViewPartial" };
+
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Home", Action = "GridViewPartialAddNew" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Home", Action = "GridViewPartialUpdate" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Home", Action = "GridViewPartialDelete" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+            settings.SettingsBehavior.ConfirmDelete = true;
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButton = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+
+            settings.KeyFieldName = "Id";
+
+            settings.SettingsPager.Visible = true;
+            settings.Settings.ShowGroupPanel = true;
+            settings.Settings.ShowFilterRow = true;
+            settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "Name");
+            settings.Settings.ShowFooter = true;
+
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+            settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+            settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+            settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+            settings.Columns.Add("Name", "Name");
+            settings.Columns.Add("Title", "Title");
+            settings.Columns.Add("Date", "Date of birth", MVCxGridViewColumnType.DateEdit);
+            settings.Columns.Add("Active", "Active", MVCxGridViewColumnType.CheckBox);
+
+            //Export
+            settings.SettingsExport.ExportSelectedRowsOnly = false;
+            settings.SettingsExport.FileName = "Report.xlsx";
+            settings.SettingsExport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+
+            return settings;
         }
 
         [HttpPost, ValidateInput(false)]

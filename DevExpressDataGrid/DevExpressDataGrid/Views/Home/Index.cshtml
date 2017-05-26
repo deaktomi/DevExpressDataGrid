@@ -4,3 +4,11 @@
 
 
 @Html.Action("GridViewPartial")
+
+@Html.DevExpress().Button(settings =>
+{
+    settings.Name = "Button";
+    settings.UseSubmitBehavior = false;
+    settings.Text = "ExportTo Excel";
+    settings.RouteValues = new { Controller = "Home", Action = "ExportTo" };
+}).GetHtml()

@@ -36,7 +36,13 @@
         settings.Columns.Add("Title", "Title");
         settings.Columns.Add("Date", "Date of birth", MVCxGridViewColumnType.DateEdit);
         settings.Columns.Add("Active", "Active", MVCxGridViewColumnType.CheckBox);
+
+        //Export
+        settings.SettingsExport.ExportSelectedRowsOnly = false;
+        settings.SettingsExport.FileName = "Report.xlsx";
+        settings.SettingsExport.PaperKind = System.Drawing.Printing.PaperKind.A4;
     });
+    ViewBag.DataGrid = grid;
     if (ViewData["EditError"] != null){
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
