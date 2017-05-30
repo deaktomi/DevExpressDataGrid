@@ -93,12 +93,13 @@ namespace DevExpressDataGrid.Controllers
             {
                 try
                 {
+                    item.ExtraDataId = 1;
                     model.Add(item);
                     db.SaveChanges();
                 }
                 catch (Exception e)
                 {
-                    ViewData["EditError"] = e.Message;
+                    ViewData["EditError"] = e.Message + "\n" + e.InnerException?.Message + "\n" + e.InnerException?.InnerException?.Message;
                 }
             }
             else

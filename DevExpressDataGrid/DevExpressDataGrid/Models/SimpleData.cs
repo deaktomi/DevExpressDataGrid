@@ -19,7 +19,7 @@ namespace DevExpressDataGrid.Models
         public System.DateTime Date { get; set; }
         public string Title { get; set; }
         public Nullable<bool> Active { get; set; }
-        public Nullable<int> ExtraDataId { get; set; }
+        public int ExtraDataId { get; set; }
     
         public virtual ExtraData ExtraData { get; set; }
     }
