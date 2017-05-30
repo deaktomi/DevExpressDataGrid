@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ExtraData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Company" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="SimpleData">
           <Key>
             <PropertyRef Name="Id" />
@@ -14,9 +21,27 @@
           <Property Name="Date" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" />
           <Property Name="Active" Type="bit" />
+          <Property Name="ExtraDataId" Type="int" />
         </EntityType>
+        <Association Name="ExtraDataFk">
+          <End Role="ExtraData" Type="Self.ExtraData" Multiplicity="0..1" />
+          <End Role="SimpleData" Type="Self.SimpleData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExtraData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SimpleData">
+              <PropertyRef Name="ExtraDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="ExtraData" EntityType="Self.ExtraData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SimpleData" EntityType="Self.SimpleData" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="ExtraDataFk" Association="Self.ExtraDataFk">
+            <End Role="ExtraData" EntitySet="ExtraData" />
+            <End Role="SimpleData" EntitySet="SimpleData" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -31,10 +56,37 @@
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
+          <Property Name="ExtraDataId" Type="Int32" />
+          <NavigationProperty Name="ExtraData" Relationship="Model.ExtraDataFk" FromRole="SimpleData" ToRole="ExtraData" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="SimpleData" EntityType="Self.SimpleData" />
+          <EntitySet Name="ExtraData" EntityType="Model.ExtraData" />
+          <AssociationSet Name="ExtraDataFk" Association="Model.ExtraDataFk">
+            <End Role="ExtraData" EntitySet="ExtraData" />
+            <End Role="SimpleData" EntitySet="SimpleData" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="ExtraData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SimpleData" Relationship="Model.ExtraDataFk" FromRole="ExtraData" ToRole="SimpleData" />
+        </EntityType>
+        <Association Name="ExtraDataFk">
+          <End Type="Model.ExtraData" Role="ExtraData" Multiplicity="0..1" />
+          <End Type="Model.SimpleData" Role="SimpleData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ExtraData">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SimpleData">
+              <PropertyRef Name="ExtraDataId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -44,11 +96,20 @@
           <EntitySetMapping Name="SimpleData">
             <EntityTypeMapping TypeName="Model.SimpleData">
               <MappingFragment StoreEntitySet="SimpleData">
+                <ScalarProperty Name="ExtraDataId" ColumnName="ExtraDataId" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExtraData">
+            <EntityTypeMapping TypeName="Model.ExtraData">
+              <MappingFragment StoreEntitySet="ExtraData">
+                <ScalarProperty Name="Company" ColumnName="Company" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

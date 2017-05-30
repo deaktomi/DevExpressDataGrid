@@ -12,15 +12,18 @@ namespace DevExpressDataGrid.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SimpleData
+    public partial class ExtraData
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Title { get; set; }
-        public Nullable<bool> Active { get; set; }
-        public Nullable<int> ExtraDataId { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ExtraData()
+        {
+            this.SimpleData = new HashSet<SimpleData>();
+        }
     
-        public virtual ExtraData ExtraData { get; set; }
+        public int Id { get; set; }
+        public string Company { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SimpleData> SimpleData { get; set; }
     }
 }

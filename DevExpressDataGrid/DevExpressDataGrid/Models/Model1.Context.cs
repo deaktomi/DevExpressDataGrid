@@ -26,5 +26,6 @@ namespace DevExpressDataGrid.Models
         }
     
         public virtual DbSet<SimpleData> SimpleData { get; set; }
+        public virtual DbSet<ExtraData> ExtraData { get; set; }
     }
 }
