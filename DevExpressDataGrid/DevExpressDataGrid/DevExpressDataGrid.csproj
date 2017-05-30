@@ -244,6 +244,7 @@
     <Content Include="Content\icons\dxicons.woff" />
     <Content Include="Content\icons\dxiconsios.ttf" />
     <Content Include="Content\icons\dxiconsios.woff" />
+    <None Include="Properties\PublishProfiles\DevExpress-Experiment - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\cldr.js" />
     <Content Include="Scripts\cldr.min.js" />
