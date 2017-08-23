@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using DevExpress.Web;
 using DevExpressDataGrid.Repository;
 
 namespace DevExpressDataGrid.Controllers
@@ -20,63 +21,54 @@ namespace DevExpressDataGrid.Controllers
         public ActionResult GridViewPartial()
         {
             var model = ComplexRepository.GetData();
+            ViewBag.GridSettings = GetGridSettings();
             return PartialView("_GridViewPartial", model);
         }
 
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialAddNew(DevExpressDataGrid.Models.ComplexModel item)
+        private GridViewSettings GetGridSettings()
         {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to insert the new item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("_GridViewPartial", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialUpdate(DevExpressDataGrid.Models.ComplexModel item)
-        {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to update the item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("_GridViewPartial", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialDelete(System.Int32 Id)
-        {
-            if (Id >= 0)
-            {
-                try
-                {
-                    ComplexRepository.Delete(Id);
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            var model = ComplexRepository.GetData();
-            return PartialView("_GridViewPartial", model);
+            var settings = new GridViewSettings();
+            settings.Name = "GridView";
+            settings.CallbackRouteValues = new { Controller = "Home", Action = "GridViewPartial" };
+            
+            settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+            settings.SettingsBehavior.ConfirmDelete = true;
+
+            settings.CommandColumn.Visible = true;
+            settings.CommandColumn.ShowNewButton = true;
+            settings.CommandColumn.ShowDeleteButton = true;
+            settings.CommandColumn.ShowEditButton = true;
+
+            settings.KeyFieldName = "Id";
+
+            settings.SettingsPager.Visible = true;
+            settings.Settings.ShowGroupPanel = true;
+            settings.Settings.ShowFilterRow = true;
+            settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+            settings.Settings.ShowHeaderFilterButton = true;
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Count, "Name");
+            settings.Settings.ShowFooter = true;
+
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+            settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+            settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+            settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+            settings.Columns.Add("Name", "Name");
+            settings.Columns.Add("Title", "Title");
+            settings.Columns.Add("Date", "Date of birth", MVCxGridViewColumnType.DateEdit);
+            settings.Columns.Add("Active", "Active", MVCxGridViewColumnType.CheckBox);
+            settings.Columns.Add("Company", "Company");
+
+            //Export
+            settings.SettingsExport.FileName = "Report.xlsx";
+            settings.SettingsExport.PaperKind = System.Drawing.Printing.PaperKind.A4;
+            settings.SettingsExport.ExportSelectedRowsOnly = false;
+
+            return settings;
         }
     }
 }

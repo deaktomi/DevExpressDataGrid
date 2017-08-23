@@ -23,6 +23,17 @@
           <Property Name="Active" Type="bit" />
           <Property Name="ExtraDataId" Type="int" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ComplexView">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Company" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <Association Name="ExtraDataFk">
           <End Role="ExtraData" Type="Self.ExtraData" Multiplicity="1" />
           <End Role="SimpleData" Type="Self.SimpleData" Multiplicity="*" />
@@ -38,6 +49,13 @@
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="ExtraData" EntityType="Self.ExtraData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SimpleData" EntityType="Self.SimpleData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ComplexView" EntityType="Self.ComplexView" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ComplexView].[Id] AS [Id], 
+    [ComplexView].[Name] AS [Name], 
+    [ComplexView].[Company] AS [Company]
+    FROM [dbo].[ComplexView] AS [ComplexView]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="ExtraDataFk" Association="Self.ExtraDataFk">
             <End Role="ExtraData" EntitySet="ExtraData" />
             <End Role="SimpleData" EntitySet="SimpleData" />
@@ -54,6 +72,7 @@
             <End Role="ExtraData" EntitySet="ExtraData" />
             <End Role="SimpleData" EntitySet="SimpleData" />
           </AssociationSet>
+          <EntitySet Name="ComplexView" EntityType="Model.ComplexView" />
         </EntityContainer>
         <EntityType Name="ExtraData">
           <Key>
@@ -87,6 +106,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ComplexView">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -108,6 +136,15 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ComplexView">
+            <EntityTypeMapping TypeName="Model.ComplexView">
+              <MappingFragment StoreEntitySet="ComplexView">
+                <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

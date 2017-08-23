@@ -167,10 +167,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ComplexController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ViewTestController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ComplexModel.cs" />
+    <Compile Include="Models\ComplexView.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ExtraData.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -325,6 +329,8 @@
     <Content Include="Views\Home\_GridViewPartial.cshtml" />
     <Content Include="Views\Complex\Index.cshtml" />
     <Content Include="Views\Complex\_GridViewPartial.cshtml" />
+    <Content Include="Views\ViewTest\Index.cshtml" />
+    <Content Include="Views\ViewTest\_GridViewPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

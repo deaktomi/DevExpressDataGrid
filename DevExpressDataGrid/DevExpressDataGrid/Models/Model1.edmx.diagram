@@ -8,6 +8,7 @@
         <EntityTypeShape EntityType="Model.ExtraData" Width="1.5" PointX="0.75" PointY="1.375" />
         <EntityTypeShape EntityType="Model.SimpleData" Width="1.5" PointX="3" PointY="1" />
         <AssociationConnector Association="Model.ExtraDataFk" />
+        <EntityTypeShape EntityType="Model.ComplexView" Width="1.5" PointX="0.75" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
