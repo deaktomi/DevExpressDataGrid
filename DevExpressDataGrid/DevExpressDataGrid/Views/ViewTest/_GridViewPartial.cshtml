@@ -1,37 +1,38 @@
 @{
-	var grid = Html.DevExpress().GridView(settings => {
+    var grid = Html.DevExpress().GridView(settings => {
         settings.Name = "GridView";
         settings.CallbackRouteValues = new { Controller = "ViewTest", Action = "GridViewPartial" };
 
-		settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
         settings.SettingsBehavior.ConfirmDelete = true;
 
-		settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Visible = true;
 
-		settings.KeyFieldName = "Id";
+        settings.KeyFieldName = "Id";
 
-		settings.SettingsPager.Visible = true;
-		settings.Settings.ShowGroupPanel = true;
-		settings.Settings.ShowFilterRow = true;
-		settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
 
-		settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-		settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-		settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-		settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-		settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-	    settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.Settings.ShowHeaderFilterButton = true;
 
-		settings.Columns.Add("Id");
-		settings.Columns.Add("Name");
-		settings.Columns.Add("Company");
-	}).BindToLINQ(typeof(DevExpressDataGrid.Models.Entities), "ComplexView", (s, e) => {
-	    // Specify queryable source 
-	    var dataContext = new DevExpressDataGrid.Models.Entities();
-	    e.QueryableSource = dataContext.ComplexView;
-	    e.KeyExpression = "Id";
-	});
-	if (ViewData["EditError"] != null){
+        settings.Columns.Add("Id");
+        settings.Columns.Add("Name");
+        settings.Columns.Add("Date");
+        settings.Columns.Add("Company");
+    }).BindToLINQ(typeof(DevExpressDataGrid.Models.Entities), "ComplexView", (s, e) => {
+        // Specify queryable source 
+        var dataContext = new DevExpressDataGrid.Models.Entities();
+        e.QueryableSource = dataContext.ComplexView;
+        e.KeyExpression = "Id";
+    });
+    if (ViewData["EditError"] != null){
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }

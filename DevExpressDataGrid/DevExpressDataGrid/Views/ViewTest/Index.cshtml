@@ -3,5 +3,15 @@
     ViewBag.Title = "Index";
 }
 
+@using (Html.BeginForm("ExportTo", "ViewTest", FormMethod.Post))
+{
+    @Html.DevExpress().Button(settings =>
+    {
+        settings.Name = "Button";
+        settings.UseSubmitBehavior = true;
+        settings.Text = "Export (.xlsx)";
+    }).GetHtml()
 
-@Html.Action("GridViewPartial")
+    @Html.Action("GridViewPartial")
+
+}

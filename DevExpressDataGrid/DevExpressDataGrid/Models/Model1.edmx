@@ -28,9 +28,11 @@ warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a pri
         <EntityType Name="ComplexView">
           <Key>
             <PropertyRef Name="Id" />
+            <PropertyRef Name="Date" />
             <PropertyRef Name="Name" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime2" Precision="7" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Company" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -52,6 +54,7 @@ warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a pri
           <EntitySet Name="ComplexView" EntityType="Self.ComplexView" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [ComplexView].[Id] AS [Id], 
+    [ComplexView].[Date] AS [Date], 
     [ComplexView].[Name] AS [Name], 
     [ComplexView].[Company] AS [Company]
     FROM [dbo].[ComplexView] AS [ComplexView]</DefiningQuery>
@@ -65,7 +68,7 @@ warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a pri
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true" a:TypeAccess="Public" xmlns:a="http://schemas.microsoft.com/ado/2006/04/codegeneration">
           <EntitySet Name="ExtraData" EntityType="Model.ExtraData" />
           <EntitySet Name="SimpleData" EntityType="Model.SimpleData" />
           <AssociationSet Name="ExtraDataFk" Association="Model.ExtraDataFk">
@@ -110,10 +113,12 @@ warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a pri
           <Key>
             <PropertyRef Name="Id" />
             <PropertyRef Name="Name" />
+            <PropertyRef Name="Date" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Company" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="7" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -144,6 +149,7 @@ warning 6002: The table/view 'experiment-db.dbo.ComplexView' does not have a pri
           <EntitySetMapping Name="ComplexView">
             <EntityTypeMapping TypeName="Model.ComplexView">
               <MappingFragment StoreEntitySet="ComplexView">
+                <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Company" ColumnName="Company" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
